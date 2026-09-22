@@ -27,9 +27,11 @@ def gameloop(screen):
         center=(screen.get_width() // 2, 240)
     )
 
-    boton = pygame.Rect(312, 350, 400, 60)
     texto_boton = fuente_subtitulo.render(
-        "Click para comenzar", True, (255, 255, 255)
+        "Inicio", True, (255, 255, 255)
+    )
+    boton_rect = texto_boton.get_rect(
+        center=(screen.get_width() // 2, 380)
     )
 
     while True:
@@ -42,17 +44,13 @@ def gameloop(screen):
                     return "salir"
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1 and boton.collidepoint(event.pos):
+                if event.button == 1 and boton_rect.collidepoint(event.pos):
                     return "comenzar"
 
         screen.blit(fondo, (0, 0))
         screen.blit(titulo, titulo_rect)
         screen.blit(subtitulo, subtitulo_rect)
+        screen.blit(texto_boton, boton_rect)
 
-        pygame.draw.rect(screen, (80, 80, 80), boton)
-        screen.blit(
-            texto_boton,
-            texto_boton.get_rect(center=boton.center)
-        )
         pygame.display.flip()
         clock.tick(30)
