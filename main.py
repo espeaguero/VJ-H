@@ -19,5 +19,6 @@ while jugando:
     resultado_juego = game_scene.gameloop(screen)
     _, ptjs_final = resultado_juego
     resultado = exit_scene.gameloop(screen, ptjs_final)
+    jugando = resultado == "Sigue"
 
 pygame.quit()

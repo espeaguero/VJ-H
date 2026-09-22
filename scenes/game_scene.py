@@ -28,6 +28,14 @@ def gameloop(screen):
     # ? Crear el reloj del juego
     clock = pygame.time.Clock()
 
+    pygame.mixer.music.load("assets/loop.WAV")
+    pygame.mixer.music.set_volume(0.3)
+    pygame.mixer.music.play(-1)
+
+    sonido_disparo = pygame.mixer.Sound("assets/disparo.wav")
+    sonido_disparo.set_volume(0.6)
+    sonido_explosion = pygame.mixer.Sound("assets/enemigos.wav")
+
     #Tablero vidas
     hud_font = pygame.font.SysFont("Chalkboard SE", 28)
 
@@ -35,6 +43,7 @@ def gameloop(screen):
     mirilla = Mirilla()
 
     running = True  # variable booleana para manejar el loop
+    juego_terminado = False
 
     # * Loop principal del juego, todo lo que ocurre en el juego se hace dentro de este loop
     while running:
@@ -60,6 +69,7 @@ def gameloop(screen):
             elif event.type == MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 player.shoot(mouse_pos)
+                sonido_disparo.play()
 
         # ? Actualizar el estado interno de los sprites (posiciones, etc)
         pressed_keys = pygame.key.get_pressed()
@@ -92,6 +102,10 @@ def gameloop(screen):
             True,
             True,
         )
+
+        if eliminados:
+            sonido_explosion.play()
+
         for lista_enemigos in eliminados.values():
             player.sumar_ptjs(len(lista_enemigos) * 10)
 
