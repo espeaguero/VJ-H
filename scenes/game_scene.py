@@ -28,6 +28,9 @@ def gameloop(screen):
     # ? Crear el reloj del juego
     clock = pygame.time.Clock()
 
+    #Tablero vidas
+    hud_font = pygame.font.SysFont("Chalkboard SE", 28)
+
     # Creamos mirilla
     mirilla = Mirilla()
 
@@ -71,23 +74,40 @@ def gameloop(screen):
         # TODO (2.5): Dibujar las balas en la ventana
         for bullet in player.bullets:
             screen.blit(bullet.image, bullet.rect)
-        # ? Calcular colisiones entre jugador y enemigos
-        if pygame.sprite.spritecollideany(player, enemies):
-            player.kill()
-            running = False
+
+        # ? Calcular colisiones entre jugador y enemigos + perder vidas
+        enemigo_chocado = pygame.sprite.spritecollideany(player, enemies)
+        if enemigo_chocado and not player.invulnerable:
+            enemigo_chocado.kill()
+            juego_terminado = player.recibir_dano()
+            if juego_terminado:
+                running = False
         
         screen.blit(mirilla.image, mirilla.rect)
 
         # TODO (2.6): Calcular colisiones entre balas y enemigos
-        pygame.sprite.groupcollide(
+        eliminados = pygame.sprite.groupcollide(
             player.bullets,
             enemies,
             True,
             True,
         )
+        for lista_enemigos in eliminados.values():
+            player.sumar_ptjs(len(lista_enemigos) * 10)
+
+        #Texto vidas
+        texto_ptjs = hud_font.render(f"Puntaje: {player.ptjs}", True, (255, 255, 255))
+        texto_vidas = hud_font.render(f"Vidas: {player.vidas}", True, (255, 255, 255))
+        screen.blit(texto_ptjs, (10, 10))
+        screen.blit(texto_vidas, (10, 40))
+
         # ? Actualizar la ventana para reflejar todos los cambios
         pygame.display.flip()
 
         # ? Controlar la velocidad de fotogramas
         clock.tick(60)
+
+    if juego_terminado:
+        return "Perdiste", player.ptjs
+    return "Sigue", player.ptjs
 

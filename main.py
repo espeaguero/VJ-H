@@ -17,8 +17,9 @@ jugando = True
 # ? Aqui se ejecutaran las escenas del juego en orden
 basic_scene.gameloop(screen)
 while jugando:
-    game_scene.gameloop(screen)
-    resultado = exit_scene.gameloop(screen)
+    resultado_juego = game_scene.gameloop(screen)
+    _, ptjs_final = resultado_juego
+    resultado = exit_scene.gameloop(screen, ptjs_final)
 
     if resultado == "Sigue":
         jugando = True

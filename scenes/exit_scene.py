@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import K_ESCAPE, KEYDOWN, QUIT, K_RETURN
 
-def gameloop(screen):
+def gameloop(screen, ptjs_final=0):
 
     # Inicializamos el reloj
     clock = pygame.time.Clock()
@@ -16,6 +16,7 @@ def gameloop(screen):
     line1 = font.render("Perdiste...", True, (255, 255, 255))
     line2 = font.render("Aprieta ESC para salir del juego,", True, (255, 255, 255))
     line3 = font.render("o enter para jugar denuevo", True, (255, 255, 255))
+    line4 = font.render(f"Puntaje final: {ptjs_final}", True, (255, 255, 255))
 
     # Definimos las posiciones de los textos
     line1_rect = line1.get_rect(
@@ -28,6 +29,10 @@ def gameloop(screen):
 
     line3_rect = line3.get_rect(
         center=(screen.get_width() // 2, screen.get_height() // 2 + 75)
+    )
+
+    line4_rect = line4.get_rect(
+        center=(screen.get_width() // 2, screen.get_height() // 2 + 125)
     )
 
     # Iniciamos el loop principal de la escena inicial
@@ -47,6 +52,7 @@ def gameloop(screen):
         screen.blit(line1, line1_rect)
         screen.blit(line2, line2_rect)
         screen.blit(line3, line3_rect)
+        screen.blit(line4, line4_rect)
 
         # Actualizar pantalla
         pygame.display.flip()

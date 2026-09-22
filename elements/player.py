@@ -31,6 +31,15 @@ class Player(pygame.sprite.Sprite):
         self.ultimo_disparo = 0
         self.cooldown = 2000
 
+        # Vidas y puntaje del jugador
+        self.vidas = 3
+        self.ptjs = 0
+
+        # Para que no se quede pegado en un mismo choque todo el rato
+        self.invulnerable = False
+        self.inicio_invuln = 0
+        self.duracion_invuln = 1500
+
     def update(self, pressed_keys):
         # ? Mover a Jorge
         if pressed_keys[K_w]:
@@ -51,6 +60,11 @@ class Player(pygame.sprite.Sprite):
         # TODO (2.4): Actualizar las balas
         self.bullets.update()
 
+        # Ver si terminó de ser vulnerable
+        if self.invulnerable:
+            if pygame.time.get_ticks() - self.inicio_invuln > self.duracion_invuln:
+                self.invulnerable = False
+
     def shoot(self, mouse_pos):
         tiempo_actual = pygame.time.get_ticks()
         if tiempo_actual - self.ultimo_disparo > self.cooldown:
@@ -69,3 +83,15 @@ class Player(pygame.sprite.Sprite):
             )
 
             self.bullets.add(bullet)
+    
+    def sumar_ptjs(self, puntos):
+        self.ptjs += puntos
+
+    def recibir_dano(self):
+        if self.invulnerable:
+            return False
+
+        self.vidas -= 1
+        self.invulnerable = True
+        self.inicio_invuln = pygame.time.get_ticks()
+        return self.vidas <= 0
