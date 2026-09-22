@@ -16,8 +16,12 @@ resultado = inicio_scene.gameloop(screen)
 jugando = resultado == "comenzar"
 
 while jugando:
-    resultado_juego = game_scene.gameloop(screen)
-    _, ptjs_final = resultado_juego
-    resultado = exit_scene.gameloop(screen, ptjs_final)
+    resultado = game_scene.gameloop(screen)
+
+    if resultado == "salir":
+        break
+
+    resultado = exit_scene.gameloop(screen)
+    jugando = resultado == "Sigue"
 
 pygame.quit()

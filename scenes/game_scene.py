@@ -5,6 +5,7 @@ import pygame
 from pygame.locals import K_ESCAPE, KEYDOWN, MOUSEBUTTONDOWN, QUIT
 
 from elements import Enemy, Player, Mirilla
+from scenes import pausa_scene
 
 
 def gameloop(screen):
@@ -35,6 +36,7 @@ def gameloop(screen):
     mirilla = Mirilla()
 
     running = True  # variable booleana para manejar el loop
+    juego_terminado = True
 
     # * Loop principal del juego, todo lo que ocurre en el juego se hace dentro de este loop
     while running:
@@ -43,12 +45,21 @@ def gameloop(screen):
 
         # Iteramos sobre cada evento en la cola
         for event in pygame.event.get():
-            if event.type == KEYDOWN:  # se presiono una tecla?
-                if event.key == K_ESCAPE:  # era la tecla de escape?
-                    running = False  # terminamos el loop
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    pygame.time.set_timer(ADDENEMY, 0)
 
-            elif event.type == QUIT:  # fue un click al cierre de la ventana?
-                running = False  # terminamos el loop
+                    resultado = pausa_scene.gameloop(screen)
+
+                    if resultado == "salir":
+                        return "salir"
+
+                    pygame.time.set_timer(ADDENEMY, 600)
+                    break
+
+            elif event.type == QUIT:
+                pygame.time.set_timer(ADDENEMY, 0)
+                return "salir"
 
             # ? Generar enemigos
             elif event.type == ADDENEMY:
@@ -107,6 +118,7 @@ def gameloop(screen):
         # ? Controlar la velocidad de fotogramas
         clock.tick(60)
 
+    pygame.time.set_timer(ADDENEMY, 0)
     if juego_terminado:
         return "Perdiste", player.ptjs
     return "Sigue", player.ptjs
