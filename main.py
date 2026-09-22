@@ -1,6 +1,6 @@
 import pygame
 
-from scenes import basic_scene, game_scene, exit_scene
+from scenes import basic_scene, game_scene, exit_scene, inicio_scene
 
 # ? Inicializamos pygame
 pygame.init()
@@ -12,15 +12,12 @@ SCREEN_HEIGHT = 768
 # ? Creamos nuestro objeto pantalla
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-jugando = True
+resultado = inicio_scene.gameloop(screen)
+jugando = resultado == "comenzar"
 
-# ? Aqui se ejecutaran las escenas del juego en orden
-basic_scene.gameloop(screen)
 while jugando:
     game_scene.gameloop(screen)
     resultado = exit_scene.gameloop(screen)
+    jugando = resultado == "Sigue"
 
-    if resultado == "Sigue":
-        jugando = True
-    else:
-        jugando = False
+pygame.quit()
