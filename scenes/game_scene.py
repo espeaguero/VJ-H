@@ -2,11 +2,12 @@ if __name__ == "__main__":
     raise RuntimeError("\033c❌ ESTE ARCHIVO NO DEBE EJECUTARSE. EJECUTA main.py")
 
 import pygame
+import random
 from pygame.locals import K_ESCAPE, KEYDOWN, MOUSEBUTTONDOWN, QUIT
 
 from elements import Enemy, Player, Mirilla
 from scenes import pausa_scene
-
+from elements.enemy import Abeja, Rana
 
 def gameloop(screen):
     # * Preparamos la escena de juego, cargando los elementos que se van a usar en el loop principal
@@ -71,7 +72,8 @@ def gameloop(screen):
 
             # ? Generar enemigos
             elif event.type == ADDENEMY:
-                new_enemy = Enemy(screen)
+                tipo_enemigo = random.choice([Enemy, Abeja, Rana])
+                new_enemy = tipo_enemigo(screen)
                 enemies.add(new_enemy)
                 all_sprites.add(new_enemy)
 
